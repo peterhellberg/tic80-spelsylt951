@@ -54,8 +54,8 @@ var game = Game{};
 
 const Player = struct {
     a: i32 = 0,
-    x: i32 = 55,
-    y: i32 = 25,
+    x: i32 = 95,
+    y: i32 = 30,
 
     f: usize = 0,
     frames: [4]i32 = .{ 256, 258, 260, 262 },
