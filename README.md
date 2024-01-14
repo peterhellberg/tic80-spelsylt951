@@ -3,6 +3,20 @@
 Using [Zig](https://ziglang.org/) to compile a `.wasm` that is
 then imported into a [TIC-80](https://tic80.com/) cart.
 
+## Jam :sweden:
+
+Kodsnacks spelsylt9.5.1
+<https://itch.io/jam/spelsylt9punkt5punkt1>
+
+Typ fyra timmar under en söndag.
+Den halvofficiella spelsylt 9.5.1.
+
+> Streckfigur på omöjligt uppdrag.
+
+> [!IMPORTANT]
+> Du måste rita alla sprites i paint (eller liknande program, ni fattar). Gör lite som ni vill med annan grafik men huvudkaraktären ska vara (ful)ritad iaf. Tänk doodles ni gör under ett halvkul möte.
+> Spelbart i browser helst.
+
 ## Development
 
 File watcher can be started by calling:
