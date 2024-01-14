@@ -17,10 +17,20 @@ const Game = struct {
 var game = Game{};
 
 const Player = struct {
-    x: i32 = 75,
-    y: i32 = 75,
+    a: i32 = 0,
+    x: i32 = 55,
+    y: i32 = 25,
+
+    f: usize = 0,
+    frames: [4]i32 = .{ 256, 258, 260, 262 },
 
     fn update(p: *Player) void {
+        p.a += 1;
+
+        if (@mod(p.a, 8) == 0) {
+            p.f = if (p.f == 3) 0 else p.f + 1;
+        }
+
         p.move();
     }
 
@@ -32,9 +42,10 @@ const Player = struct {
     }
 
     fn draw(p: *Player) void {
-        tic.spr(256, p.x, p.y, .{
+        tic.spr(p.frames[p.f], p.x, p.y, .{
             .w = 2,
             .h = 2,
+            .scale = 4,
             .transparent = &[_]u8{0},
         });
     }
