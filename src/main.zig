@@ -51,8 +51,8 @@ const Player = struct {
         if (tic.btn(2)) p.x -= 1;
         if (tic.btn(3)) p.x += 1;
 
-        if (tic.fget(tic.mget(@divFloor(p.x + 4, 8), @divFloor(p.y + 15, 8)), 0) or
-            tic.fget(tic.mget(@divFloor(p.x + 11, 8), @divFloor(p.y + 15, 8)), 0))
+        if (tic.fget(tic.mget(@divFloor(p.x + 3, 8), @divFloor(p.y + 7, 8)), 0) or
+            tic.fget(tic.mget(@divFloor(p.x - 3, 8), @divFloor(p.y + 7, 8)), 0))
         {
             p.x = lx;
             p.y = ly;
@@ -66,7 +66,7 @@ const Player = struct {
     }
 
     fn draw(p: *Player) void {
-        tic.spr(p.frames[p.f], p.x, p.y, .{
+        tic.spr(p.frames[p.f], p.x - 8, p.y - 8, .{
             .w = 2,
             .h = 2,
             .scale = 1,
