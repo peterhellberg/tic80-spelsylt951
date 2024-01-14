@@ -109,8 +109,9 @@ const Player = struct {
         if (p.e > 30) {
             const c: i32 = @divFloor(p.e, 4);
 
-            tic.elli(p.x, p.y, c, c, 15);
-            tic.ellib(p.x, p.y, c + 1, c + 1, 9);
+            tic.ellib(p.x, p.y, c - 2, c - 2, 1);
+            tic.ellib(p.x, p.y, c, c, 5);
+            tic.ellib(p.x, p.y, c + 2, c + 2, 6);
         }
 
         tic.spr(p.frames[p.f], p.x - 8, p.y - 8, .{
