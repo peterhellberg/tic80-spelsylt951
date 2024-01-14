@@ -14,7 +14,7 @@ const Game = struct {
     fn update(g: *Game) void {
         g.a += 1;
 
-        if (@mod(g.a, 60) == 0) {
+        if (@mod(g.a, 60) == 0 and g.blobs.len < 128) {
             g.addBlob();
         }
 
@@ -47,6 +47,8 @@ const Game = struct {
         g.player.draw();
 
         for (g.blobs.slice()) |*b| b.draw();
+
+        _ = tic.printf("SCORE: {}", .{g.player.score}, 180, 2, .{});
     }
 };
 
@@ -76,7 +78,7 @@ const Player = struct {
         }
 
         p.e += 1;
-        if (p.e > 60) p.e = 0;
+        if (p.e > 70) p.e = 0;
 
         if (tic.btn(2)) p.flip = .horizontal;
         if (tic.btn(3)) p.flip = .no;
@@ -127,7 +129,7 @@ const Player = struct {
 };
 
 const Blob = struct {
-    hp: i32 = 10,
+    hp: i32 = 6,
     a: i32 = 0,
     x: i32,
     y: i32,
@@ -143,6 +145,8 @@ const Blob = struct {
 
         if (p.e > 30 and b.distanceFrom(p) < p.e) {
             b.hp -= 1;
+        } else {
+            if (b.distanceFrom(p) < 4) p.score -= 1;
         }
 
         if (b.hp < 0) {
