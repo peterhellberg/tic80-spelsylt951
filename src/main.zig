@@ -48,7 +48,8 @@ const Game = struct {
 
         for (g.blobs.slice()) |*b| b.draw();
 
-        _ = tic.printf("SCORE: {}", .{g.player.score}, 180, 2, .{});
+        _ = tic.printf("SCORE: {}", .{g.player.score}, 170, 3, .{ .color = 6 });
+        _ = tic.printf("   MAX: {}", .{g.player.max}, 170, 9, .{ .color = 5 });
     }
 };
 
@@ -65,6 +66,7 @@ const Player = struct {
     flip: tic.Flip = .no,
 
     score: i32 = 0,
+    max: i32 = 0,
 
     fn update(p: *Player) void {
         p.a += 1;
@@ -160,6 +162,8 @@ const Blob = struct {
             b.f = random.intRangeAtMost(usize, 0, 2);
 
             p.score += 1;
+
+            if (p.score > p.max) p.max = p.score;
         }
     }
 
