@@ -29,8 +29,15 @@ const Player = struct {
         p.a += 1;
 
         if (@mod(p.a, 8) == 0) {
-            p.f = if (p.f == 3) 0 else p.f + 1;
+            if (tic.btn(0) or tic.btn(1) or tic.btn(2) or tic.btn(3)) {
+                p.f = if (p.f == 3) 0 else p.f + 1;
+            } else {
+                p.f = 0;
+            }
         }
+
+        if (tic.btn(2)) p.flip = .horizontal;
+        if (tic.btn(3)) p.flip = .no;
 
         p.move();
     }
@@ -40,16 +47,13 @@ const Player = struct {
         if (tic.btn(1)) p.y += 1;
         if (tic.btn(2)) p.x -= 1;
         if (tic.btn(3)) p.x += 1;
-
-        if (tic.btn(2)) p.flip = .horizontal;
-        if (tic.btn(3)) p.flip = .no;
     }
 
     fn draw(p: *Player) void {
         tic.spr(p.frames[p.f], p.x, p.y, .{
             .w = 2,
             .h = 2,
-            .scale = 4,
+            .scale = 2,
             .transparent = &[_]u8{0},
             .flip = p.flip,
         });
