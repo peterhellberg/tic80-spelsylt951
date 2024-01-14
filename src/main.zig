@@ -23,6 +23,7 @@ const Player = struct {
 
     f: usize = 0,
     frames: [4]i32 = .{ 256, 258, 260, 262 },
+    flip: tic.Flip = .no,
 
     fn update(p: *Player) void {
         p.a += 1;
@@ -39,6 +40,9 @@ const Player = struct {
         if (tic.btn(1)) p.y += 1;
         if (tic.btn(2)) p.x -= 1;
         if (tic.btn(3)) p.x += 1;
+
+        if (tic.btn(2)) p.flip = .horizontal;
+        if (tic.btn(3)) p.flip = .no;
     }
 
     fn draw(p: *Player) void {
@@ -47,6 +51,7 @@ const Player = struct {
             .h = 2,
             .scale = 4,
             .transparent = &[_]u8{0},
+            .flip = p.flip,
         });
     }
 };
