@@ -1,16 +1,52 @@
+const std = @import("std");
 const tic = @import("tic");
 
+var prng = std.rand.DefaultPrng.init(0);
+const random = prng.random();
+
 const Game = struct {
+    a: i32 = 0,
+
     player: Player = .{},
 
+    blobs: std.BoundedArray(Blob, 128) = .{},
+
     fn update(g: *Game) void {
+        g.a += 1;
+
+        if (@mod(g.a, 60) == 0) {
+            g.addBlob();
+        }
+
         g.player.update();
+
+        for (g.blobs.slice()) |*b| {
+            b.update(&g.player);
+        }
+    }
+
+    fn addBlob(g: *Game) void {
+        const above = random.boolean();
+        const left = random.boolean();
+
+        const b: Blob = .{
+            .x = if (left) random.intRangeAtMost(i32, -120, 0) else random.intRangeAtMost(i32, 240, 320),
+            .y = if (above) random.intRangeAtMost(i32, -120, 0) else random.intRangeAtMost(i32, 136, 200),
+            .f = random.intRangeAtMost(usize, 0, 2),
+        };
+
+        g.blobs.append(b) catch {
+            _ = g.blobs.orderedRemove(0);
+            g.blobs.appendAssumeCapacity(b);
+        };
     }
 
     fn draw(g: *Game) void {
         tic.map(.{});
 
         g.player.draw();
+
+        for (g.blobs.slice()) |*b| b.draw();
     }
 };
 
@@ -72,6 +108,47 @@ const Player = struct {
             .scale = 1,
             .transparent = &[_]u8{0},
             .flip = p.flip,
+        });
+    }
+};
+
+const Blob = struct {
+    a: i32 = 0,
+    x: i32,
+    y: i32,
+    f: usize,
+    frames: [3]i32 = .{ 288, 289, 290 },
+
+    fn update(b: *Blob, p: *Player) void {
+        b.a += 1;
+
+        if (@mod(b.a, 8) == 0) b.f = if (b.f == 2) 0 else b.f + 1;
+
+        b.move(p);
+    }
+
+    fn move(b: *Blob, p: *Player) void {
+        const lx = b.x;
+        const ly = b.y;
+
+        if (random.boolean()) {
+            if (b.x < p.x) b.x += 1;
+            if (b.x > p.x) b.x -= 1;
+        } else {
+            if (b.y < p.y) b.y += 1;
+            if (b.y > p.y) b.y -= 1;
+        }
+
+        if (tic.fget(tic.mget(@divFloor(b.x, 8), @divFloor(b.y, 8)), 0)) {
+            b.x = lx;
+            b.y = ly;
+        }
+    }
+
+    fn draw(b: *Blob) void {
+        tic.spr(b.frames[b.f], b.x - 4, b.y - 4, .{
+            .scale = 1,
+            .transparent = &[_]u8{0},
         });
     }
 };
