@@ -43,17 +43,27 @@ const Player = struct {
     }
 
     fn move(p: *Player) void {
+        const lx = p.x;
+        const ly = p.y;
+
         if (tic.btn(0)) p.y -= 1;
         if (tic.btn(1)) p.y += 1;
         if (tic.btn(2)) p.x -= 1;
         if (tic.btn(3)) p.x += 1;
+
+        if (tic.fget(tic.mget(@divFloor(p.x + 4, 8), @divFloor(p.y + 15, 8)), 0) or
+            tic.fget(tic.mget(@divFloor(p.x + 11, 8), @divFloor(p.y + 15, 8)), 0))
+        {
+            p.x = lx;
+            p.y = ly;
+        }
     }
 
     fn draw(p: *Player) void {
         tic.spr(p.frames[p.f], p.x, p.y, .{
             .w = 2,
             .h = 2,
-            .scale = 2,
+            .scale = 1,
             .transparent = &[_]u8{0},
             .flip = p.flip,
         });
