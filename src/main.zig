@@ -54,6 +54,7 @@ var game = Game{};
 
 const Player = struct {
     a: i32 = 0,
+    e: i32 = 0,
     x: i32 = 105,
     y: i32 = 30,
 
@@ -71,6 +72,9 @@ const Player = struct {
                 p.f = 0;
             }
         }
+
+        p.e += 1;
+        if (p.e > 60) p.e = 0;
 
         if (tic.btn(2)) p.flip = .horizontal;
         if (tic.btn(3)) p.flip = .no;
@@ -102,6 +106,13 @@ const Player = struct {
     }
 
     fn draw(p: *Player) void {
+        if (p.e > 30) {
+            const c: i32 = @divFloor(p.e, 4);
+
+            tic.elli(p.x, p.y, c, c, 15);
+            tic.ellib(p.x, p.y, c + 1, c + 1, 9);
+        }
+
         tic.spr(p.frames[p.f], p.x - 8, p.y - 8, .{
             .w = 2,
             .h = 2,
