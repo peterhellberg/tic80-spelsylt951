@@ -9,7 +9,7 @@ const Game = struct {
 
     player: Player = .{},
 
-    blobs: std.BoundedArray(Blob, 256) = .{},
+    blobs: std.BoundedArray(Blob, 128) = .{},
 
     fn update(g: *Game) void {
         g.a += 1;
@@ -61,6 +61,8 @@ const Player = struct {
     f: usize = 0,
     frames: [4]i32 = .{ 256, 258, 260, 262 },
     flip: tic.Flip = .no,
+
+    score: i32 = 0,
 
     fn update(p: *Player) void {
         p.a += 1;
@@ -125,6 +127,7 @@ const Player = struct {
 };
 
 const Blob = struct {
+    hp: i32 = 10,
     a: i32 = 0,
     x: i32,
     y: i32,
@@ -137,6 +140,27 @@ const Blob = struct {
         if (@mod(b.a, 8) == 0) b.f = if (b.f == 2) 0 else b.f + 1;
 
         b.move(p);
+
+        if (p.e > 30 and b.distanceFrom(p) < p.e) {
+            b.hp -= 1;
+        }
+
+        if (b.hp < 0) {
+            b.hp = 10;
+
+            const above = random.boolean();
+            const left = random.boolean();
+
+            b.x = if (left) random.intRangeAtMost(i32, -120, 0) else random.intRangeAtMost(i32, 240, 320);
+            b.y = if (above) random.intRangeAtMost(i32, -120, 0) else random.intRangeAtMost(i32, 136, 200);
+            b.f = random.intRangeAtMost(usize, 0, 2);
+
+            p.score += 1;
+        }
+    }
+
+    fn distanceFrom(b: *Blob, p: *Player) i32 {
+        return ((p.x - b.x) * (p.x - b.x)) + ((p.y - b.y) * (p.y - b.y));
     }
 
     fn move(b: *Blob, p: *Player) void {
