@@ -54,7 +54,7 @@ var game = Game{};
 
 const Player = struct {
     a: i32 = 0,
-    x: i32 = 95,
+    x: i32 = 105,
     y: i32 = 30,
 
     f: usize = 0,
