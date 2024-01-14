@@ -57,6 +57,12 @@ const Player = struct {
             p.x = lx;
             p.y = ly;
         }
+
+        // Wrap around the map for now
+        if (p.x < -16) p.x = 235;
+        if (p.x > 240) p.x = -16;
+        if (p.y < -16) p.y = 136;
+        if (p.y > 136) p.y = -16;
     }
 
     fn draw(p: *Player) void {
