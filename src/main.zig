@@ -131,7 +131,7 @@ const Player = struct {
 };
 
 const Blob = struct {
-    hp: i32 = 6,
+    hp: i32 = 5,
     a: i32 = 0,
     x: i32,
     y: i32,
@@ -145,14 +145,14 @@ const Blob = struct {
 
         b.move(p);
 
-        if (p.e > 30 and b.distanceFrom(p) < p.e) {
+        if (p.e > 25 and b.distanceFrom(p) < p.e + 8) {
             b.hp -= 1;
         } else {
             if (b.distanceFrom(p) < 4) p.score -= 1;
         }
 
         if (b.hp < 0) {
-            b.hp = 10;
+            b.hp = 5;
 
             const above = random.boolean();
             const left = random.boolean();
@@ -194,6 +194,11 @@ const Blob = struct {
             .scale = 1,
             .transparent = &[_]u8{0},
         });
+
+        for (0..@intCast(b.hp)) |i| {
+            const o: i32 = @intCast(i);
+            tic.pix(b.x + o - 3, b.y + 3, 15);
+        }
     }
 };
 
