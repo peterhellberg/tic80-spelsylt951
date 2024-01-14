@@ -9,7 +9,7 @@ const Game = struct {
 
     player: Player = .{},
 
-    blobs: std.BoundedArray(Blob, 128) = .{},
+    blobs: std.BoundedArray(Blob, 256) = .{},
 
     fn update(g: *Game) void {
         g.a += 1;
